@@ -102,13 +102,13 @@ def request_company_info(id_str, position_year):
             for info in year_infos:
                 td = info.find_all('td')
                 if td[0].text == position_year:
-                    if td[1].text == "상반기":
-                        first_half[0] = td[4]   # 서비스 건수
-                        first_half[1] = td[5]   # 제공인력 
+                    if td[1].text.strip() == "상반기":
+                        first_half[0] = td[4].text   # 서비스 건수
+                        first_half[1] = td[5].text   # 제공인력
 
                     else:
-                        second_half[0] = td[4]   # 서비스 건수
-                        second_half[1] = td[5]   # 제공인력
+                        second_half[0] = td[4].text   # 서비스 건수
+                        second_half[1] = td[5].text   # 제공인력
 
             return [title, ceo_name, ceo_number, admin_name, admin_number, admin_email, address, first_half[0], first_half[1], second_half[0], second_half[1]]
             # 업체명, 대표자명, 대표자 전화번호, 관리자명, 관리자 전화번호, 관리자 이메일, 주소, (상반기)제공건수, 제공인력, (하반기)제공건수, 제공인력
