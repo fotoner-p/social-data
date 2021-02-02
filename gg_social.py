@@ -3,6 +3,7 @@ from social_crawler import request_company_list, request_company_info
 
 open_url = "https://openapi.gg.go.kr/Pwnmsoctysevinst"
 
+position_year = "2020"
 
 cido = [
     {
@@ -84,12 +85,12 @@ for item in cido:
     for id in ids:
         print(id)
         try:
-            result_list.append(request_company_info(id))
+            result_list.append(request_company_info(id, position_year))
 
         except Exception:
             print("None")
 
-    df = pd.DataFrame(result_list, columns=["업체명", "대표자명", "대표자 전화번호", "관리자명", "관리자 전화번호", "관리자 이메일", "주소", "서비스 건수", "제공인력"])
+    df = pd.DataFrame(result_list, columns=["업체명", "대표자명", "대표자 전화번호", "관리자명", "관리자 전화번호", "관리자 이메일", "주소", "상반기 서비스 건수", "상반기 제공인력", "하반기 서비스 건수", "하반기 제공인력"])
     df.to_csv(item['SCLAS_NM'] + "_리스트.csv", index=False, encoding="cp949")
 
     print()

@@ -60,7 +60,7 @@ def request_company_list(city):
         page += 1
 
 
-def request_company_info(id_str):
+def request_company_info(id_str, position_year):
     url = "https://www.socialservice.or.kr:444/user/svcsrch/supply/supplyView.do"
 
     headers = {'User-Agent': 'Mozilla/5.0'}
@@ -94,18 +94,26 @@ def request_company_info(id_str):
 
     for i, item in enumerate(h4):
         if item.text.find("사업실적") == 0:
-            user = div[i + 1].select("table > tbody > tr:nth-of-type(1) > td:nth-of-type(5)")[0].text
-            provide = div[i + 1].select("table > tbody > tr:nth-of-type(1) > td:nth-of-type(6)")[0].text
+            year_infos = div[i + 1].find('tbody').find_all("tr")
 
-            if user == '-':
-                user = ''
+            first_half = ['', '']
+            second_half = first_half.copy()
 
-            if provide == '-':
-                provide = ''
+            for info in year_infos:
+                td = info.find_all('td')
+                if td[0].text == position_year:
+                    if td[1].text == "상반기":
+                        first_half[0] = td[4]   # 서비스 건수
+                        first_half[1] = td[5]   # 제공인력 
 
-            return [title, ceo_name, ceo_number, admin_name, admin_number, admin_email, address, user, provide]
-            # 업체명, 대표자명, 대표자 전화번호, 관리자명, 관리자 전화번호, 관리자 이메일, 주소, 제공건수, 제공인력
+                    else:
+                        second_half[0] = td[4]   # 서비스 건수
+                        second_half[1] = td[5]   # 제공인력
+
+            return [title, ceo_name, ceo_number, admin_name, admin_number, admin_email, address, first_half[0], first_half[1], second_half[0], second_half[1]]
+            # 업체명, 대표자명, 대표자 전화번호, 관리자명, 관리자 전화번호, 관리자 이메일, 주소, (상반기)제공건수, 제공인력, (하반기)제공건수, 제공인력
 
 
 if __name__ == "__main__":
-    result = request_company_list('003')
+    # result = request_company_list('003')
+    pass
